@@ -1,0 +1,7 @@
+# Never commit raw (unscrubbed) exports
+_raw/
+raw/
+*.zip
+.DS_Store
+node_modules/
+dist/

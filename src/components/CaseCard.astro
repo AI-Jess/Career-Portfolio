@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { entry: CollectionEntry<'caseStudies'> }
+const { entry } = Astro.props;
+const d = entry.data;
+const lead = d.metrics[0];
+---
+<a class="card case" href={`/case-studies/${entry.id}/`}>
+  <div class="top">
+    <span class="eyebrow">{d.org}</span>
+    {lead && <span class="lead"><strong>{lead.value}</strong> {lead.label}</span>}
+  </div>
+  <h3>{d.title}</h3>
+  <p class="muted">{d.summary}</p>
+  <ul class="chips">{d.tools.slice(0, 4).map((t) => <li>{t}</li>)}</ul>
+</a>
+
+<style>
+  .case { display: flex; flex-direction: column; gap: 0.5rem; padding: 1.5rem; text-decoration: none; color: inherit; transition: border-color 0.15s, transform 0.15s; }
+  .case:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .top { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: baseline; }
+  .lead { font-size: 0.85rem; color: var(--muted); }
+  .lead strong { color: var(--text); }
+  h3 { margin: 0.25rem 0 0; }
+  p { margin: 0 0 0.5rem; font-size: 0.95rem; }
+</style>

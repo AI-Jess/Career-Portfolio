@@ -1,0 +1,51 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="shared.css">
+<style>
+  #shot { width: 1400px; background: linear-gradient(180deg, #e9f2f2 0, #9fcfcc 520px, #7fbfbb 100%); position: relative; overflow: hidden; }
+  .top { height: 52px; background: #f3f8f8; border-bottom: 1px solid #dfe8e8; display: flex; align-items: center; padding: 0 18px; gap: 14px; font-size: 15px; }
+  .waffle { width: 16px; height: 16px; background: radial-gradient(circle, #555 1.6px, transparent 1.8px) 0 0/5.33px 5.33px; }
+  .top .app { font-weight: 600; }
+  .top .ttl { margin: 0 auto; font-size: 14px; color: #333; }
+  .top .ttl span { color: #777; margin-left: 8px; font-size: 13px; }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #999; display: grid; place-items: center; font-size: 11px; }
+  .tools { display: flex; justify-content: flex-end; gap: 22px; align-items: center; padding: 14px 24px; font-size: 14px; font-weight: 500; }
+  .pill { background: #03787c; color: #fff; padding: 8px 16px; border-radius: 999px; font-weight: 600; }
+  .pill.o { background: #fff; color: #03787c; border: 1.5px solid #03787c; position: relative; }
+  .badge { position: absolute; top: -10px; right: 8px; background: #03787c; color: #fff; font-size: 11px; padding: 1px 6px; border-radius: 999px; }
+  .wave { position: absolute; left: -100px; right: -100px; bottom: 60px; height: 260px; border-top: 2px solid rgba(255,255,255,.55); border-radius: 50% 50% 0 0; }
+  .card { position: relative; width: 900px; margin: 6px auto 0; background: #fff; border-radius: 8px 8px 0 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .head { padding: 44px 50px 22px; }
+  h1 { margin: 0 0 18px; font-size: 26px; font-weight: 500; color: #333; }
+  h1 .br { color: #03787c; font-size: 18px; margin-left: 6px; }
+  .desc { font-size: 13.5px; line-height: 1.55; color: #555; margin: 0 0 16px; }
+  .desc a { color: #0f3bd6; }
+  .warn { color: #0f5cc0; font-weight: 700; font-size: 16px; line-height: 1.4; margin: 0; }
+  .sec { background: #f3f3f3; padding: 11px 30px; font-size: 13px; color: #555; display: flex; justify-content: space-between; }
+  .q { padding: 30px 50px 6px; font-size: 15px; }
+  .q .n { margin-right: 6px; }
+  .q b { color: #0f5cc0; }
+  .q .req { color: #c4314b; }
+  .opt { display: flex; align-items: center; gap: 12px; margin: 16px 0 0 22px; font-size: 14px; }
+  .opt i { width: 19px; height: 19px; border-radius: 50%; border: 1.5px solid #555; }
+  .sel { border-left: 4px solid #03787c; background: #fafafa; padding-bottom: 26px; }
+</style></head>
+<body><div id="shot">
+  <div class="top"><span class="waffle"></span><span class="app">Forms</span>
+    <span class="ttl">Patent and Trademark Staffing Update Request <span>· Saved</span></span><span class="avatar">IO</span></div>
+  <div class="tools"><span>Style</span><span>Settings</span><span>Preview</span><span class="pill">Collect responses</span><span class="pill o">View responses<span class="badge">9,940</span></span><span>Present</span></div>
+  <div class="wave"></div>
+  <div class="card">
+    <div class="head">
+      <h1>Patent and Trademark Staffing Update Request <span class="br">⑂</span></h1>
+      <p class="desc">This form should be completed when you are requesting an update to staffing assignments for patent and trademark matters by client, family or matter. If your staffing update is not based on client, family or matter, e.g. an individual is being replaced with another individual for all clients, please email <a>ip-staffing@example-firm.com</a>.</p>
+      <p class="warn">*These staffing requests are performed through automation. Errors on this form will cause the requested update to fail or make changes outside of the intended updates*</p>
+    </div>
+    <div class="sec"><span>Section 1</span><span>···</span></div>
+    <div class="q"><span class="n">1.</span>Is this request being initiated due to an <b>Attorney</b> departure? <span class="req">*</span>
+      <div class="opt"><i></i>Yes</div><div class="opt"><i></i>No</div></div>
+    <div class="q"><span class="n">2.</span>Is this request for the <b>removal</b> of staff from a role? <b>(Only use if multiple staff hold a role and one or more need to be removed)</b> <span class="req">*</span>
+      <div class="opt"><i></i>Yes</div><div class="opt"><i></i>No</div></div>
+    <div class="q sel"><span class="n">3.</span>Are you updating for the Entire Client, Family, or Matter/Matter List? (E.g. <b>Client = 10482 / Family = 10482-0311 / Matter = 10482-0311US1</b>) <span class="req">*</span>
+      <div class="opt"><i></i>Entire Client</div><div class="opt"><i></i>Family</div><div class="opt"><i></i>Matter/Matter List</div></div>
+  </div>
+</div></body></html>

@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import Mermaid from '../../components/Mermaid.astro';
+import { getCollection, render } from 'astro:content';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('caseStudies', ({ data }) => !data.draft);
+  return cases.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const launched = d.launched.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+<Base title={d.title} description={d.summary}>
+  <article class="wrap page">
+    <a class="back" href="/case-studies/">← Case studies</a>
+    <p class="eyebrow">{d.org}</p>
+    <h1>{d.title}</h1>
+    <p class="summary muted">{d.summary}</p>
+
+    <dl class="meta card">
+      <div><dt>Role</dt><dd>{d.role}</dd></div>
+      <div><dt>Launched</dt><dd>{launched}</dd></div>
+      {d.status && <div><dt>Status</dt><dd>{d.status}</dd></div>}
+      <div class="tools"><dt>Tools</dt><dd><ul class="chips">{d.tools.map((t) => <li>{t}</li>)}</ul></dd></div>
+    </dl>
+
+    {d.metrics.length > 0 && (
+      <ul class="metrics" aria-label="Results">
+        {d.metrics.map((m) => (
+          <li class="card">
+            <strong>{m.value}</strong>
+            <span>{m.label}</span>
+            {m.note && <small class="muted">{m.note}</small>}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <div class="prose"><Content /></div>
+
+    <aside class="card cta">
+      <p>Want to talk about automating a legal ops process?</p>
+      <div class="btns">
+        <a class="btn primary" href="/contact/">Get in touch</a>
+        <a class="btn" href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </aside>
+  </article>
+  <Mermaid />
+</Base>
+
+<style>
+  .page { padding-top: 2rem; }
+  .back { display: inline-block; margin-bottom: 1.5rem; font-size: 0.9rem; text-decoration: none; }
+  h1 { max-width: 24ch; }
+  .summary { font-size: 1.15rem; max-width: 62ch; }
+  .meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem 1.5rem; padding: 1.25rem 1.5rem; margin: 2rem 0 1rem; }
+  .meta dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+  .meta dd { margin: 0.2rem 0 0; font-size: 0.95rem; }
+  .meta .tools { grid-column: 1 / -1; }
+  .metrics { list-style: none; padding: 0; margin: 1rem 0 2rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  .metrics li { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; }
+  .metrics strong { font-size: 2rem; letter-spacing: -0.03em; color: var(--accent); line-height: 1.1; }
+  .metrics small { font-size: 0.78rem; line-height: 1.4; margin-top: 0.3rem; }
+  .cta { margin-top: 3rem; padding: 1.5rem; max-width: var(--prose); }
+  .cta p { margin: 0 0 1rem; font-weight: 600; }
+  .btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+</style>

@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import { software, setup, setupPhoto, type StackGroup } from '../data/stack';
+
+const hasAffiliate = setup.some((g) => g.items.some((i) => i.affiliate));
+const sections: { id: string; title: string; intro: string; groups: StackGroup[] }[] = [
+  { id: 'software', title: 'Software', intro: 'What I build with day to day.', groups: software },
+  { id: 'setup', title: 'Setup', intro: 'The physical desk behind the flows.', groups: setup },
+];
+---
+<Base title="Stack" description="The software I build with and the desk setup I build on.">
+  <section class="wrap page">
+    <h1>Stack</h1>
+    <p class="muted lede">Tools I use to design, build, and support automations, plus the hardware on my desk.</p>
+    <nav class="jump"><a href="#software">Software</a><a href="#setup">Setup</a></nav>
+
+    {sections.map((s) => (
+      <section id={s.id}>
+        <h2>{s.title}</h2>
+        <p class="muted">{s.intro}</p>
+        {s.id === 'setup' && setupPhoto && <img class="photo" src={setupPhoto.src} alt={setupPhoto.alt} />}
+        <div class="groups">
+          {s.groups.map((g) => (
+            <div class="card group">
+              <h3>{g.title}</h3>
+              <ul>
+                {g.items.map((i) => (
+                  <li>
+                    {i.link
+                      ? <a href={i.link} target="_blank" rel={i.affiliate ? 'sponsored noopener' : 'noopener'}>{i.name}</a>
+                      : <span class="name">{i.name}</span>}
+                    {i.note && <span class="muted note">{i.note}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+    {hasAffiliate && <p class="muted disclosure">Some setup links are affiliate links. I may earn a small commission at no cost to you.</p>}
+  </section>
+</Base>
+
+<style>
+  .page { padding-top: 3rem; }
+  .lede { max-width: 60ch; }
+  .jump { display: flex; gap: 1rem; margin: 1rem 0 0; font-size: 0.95rem; }
+  .groups { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+  .group { padding: 1.25rem 1.5rem; }
+  .group h3 { margin: 0 0 0.75rem; font-size: 1rem; }
+  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
+  li { display: flex; flex-direction: column; }
+  .name, li > a { font-weight: 600; }
+  .note { font-size: 0.88rem; line-height: 1.45; }
+  .photo { border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 1rem; }
+  .disclosure { font-size: 0.85rem; margin-top: 2rem; }
+</style>

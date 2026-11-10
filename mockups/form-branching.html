@@ -1,0 +1,46 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="shared.css">
+<style>
+  #shot { width: 1300px; background: #e9f2f2; padding: 0 60px 40px; }
+  .back { padding: 14px 4px; font-size: 15px; font-weight: 500; }
+  .card { background: #fff; padding: 10px 0 20px; border-radius: 6px; }
+  .q { padding: 22px 40px 10px; font-size: 15.5px; line-height: 1.5; }
+  .q b { color: #0f5cc0; }
+  .q .req { color: #c4314b; }
+  .row { display: grid; grid-template-columns: 1fr 520px; align-items: center; margin: 12px 0 0 22px; font-size: 14.5px; }
+  .row .l { display: flex; align-items: center; gap: 12px; }
+  .row i { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #555; }
+  .goto { display: flex; align-items: center; gap: 12px; color: #444; }
+  .goto span { color: #03787c; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .goto.dd span { flex: 1; background: #fff; border: 1px solid #e3e3e3; border-radius: 4px; padding: 7px 12px; display: flex; justify-content: space-between; }
+  .goto.dd span::after { content: '⌄'; color: #555; }
+  .sel { margin: 22px 26px; padding: 6px 14px 22px; background: #f5f5f5; border-top: 4px solid #03787c; }
+  .sel .q { padding: 16px 14px 6px; }
+</style></head>
+<body><div id="shot">
+  <div class="back">← Back</div>
+  <div class="card">
+    <div class="q">1. Is this request being initiated due to an <b>Attorney</b> departure? <span class="req">*</span>
+      <div class="row"><div class="l"><i></i>Yes</div><div class="goto">Go to <span>2. Please close this form and send your request to the IP Operations…</span></div></div>
+      <div class="row"><div class="l"><i></i>No</div><div class="goto">Go to <span>2. Is this request for the removal of staff from a role? (…</span></div></div>
+    </div>
+    <div class="q">2. Is this request for the <b>removal</b> of staff from a role? <b>(Only use if multiple staff hold a role and one or more need to be removed)</b> <span class="req">*</span>
+      <div class="row"><div class="l"><i></i>Yes</div><div class="goto">Go to <span>59. Are you removing for an Entire Client, Family, or Matter/Matt…</span></div></div>
+      <div class="row"><div class="l"><i></i>No</div><div class="goto">Go to <span>3. Are you updating for the Entire Client, Family, or Matter/Matte…</span></div></div>
+    </div>
+    <div class="sel">
+      <div class="q">3. Are you updating for the Entire Client, Family, or Matter/Matter List? (E.g. <b>Client = 10482 / Family = 10482-0311 / Matter = 10482-0311US1</b>) <span class="req">*</span>
+        <div class="row"><div class="l"><i></i>Entire Client</div><div class="goto dd">Go to <span>4. Which jurisdiction is the update for? (Client)</span></div></div>
+        <div class="row"><div class="l"><i></i>Family</div><div class="goto dd">Go to <span>5. Which jurisdiction is the update for? (Family)</span></div></div>
+        <div class="row"><div class="l"><i></i>Matter/Matter List</div><div class="goto dd">Go to <span>8. List your matter or matter list (e.g. 10482-0311US1)…</span></div></div>
+      </div>
+    </div>
+    <div class="q">4. Which jurisdiction is the update for? (Client) <span class="req">*</span>
+      <div class="row"><div class="l"><i></i>All</div><div class="goto">Go to <span>6. List client number(s) (e.g. 10482). Note: Separate multiple by…</span></div></div>
+      <div class="row"><div class="l"><i></i>EP</div><div class="goto">Go to <span>6. List client number(s) (e.g. 10482). Note: Separate multiple by…</span></div></div>
+      <div class="row"><div class="l"><i></i>EU (Designs Only)</div><div class="goto">Go to <span>6. List client number(s) (e.g. 10482). Note: Separate multiple by…</span></div></div>
+      <div class="row"><div class="l"><i></i>EU (Trademarks Only)</div><div class="goto">Go to <span>6. List client number(s) (e.g. 10482). Note: Separate multiple by…</span></div></div>
+      <div class="row"><div class="l"><i></i>US</div><div class="goto">Go to <span>6. List client number(s) (e.g. 10482). Note: Separate multiple by…</span></div></div>
+    </div>
+  </div>
+</div></body></html>

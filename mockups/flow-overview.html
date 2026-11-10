@@ -1,0 +1,47 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="flow.css">
+<style>
+  #shot { width: 1100px; }
+  .area { padding: 34px 0 40px; }
+  .fork { display: grid; grid-template-columns: 1fr 1fr; width: 640px; position: relative; padding-top: 22px; }
+  .fork::before { content: ''; position: absolute; top: 0; left: 25%; right: 25%; border-top: 2px dashed #8a8a8a; }
+  .fork .col::before { content: ''; width: 2px; height: 22px; background: #8a8a8a; margin-top: -22px; }
+  .lbl { font-size: 11px; color: #666; margin: 4px 0 2px; }
+</style></head>
+<body><div id="shot">
+  <div class="bar"><span>← Back</span><span class="t">IP Operations – Staffing Update Form (Entire Client) → SQL</span></div>
+  <div class="canvas area"><div class="col">
+    <div class="act forms"><span class="ico">F</span>When a new response is submitted</div>
+    <div class="link"></div>
+    <div class="scope"><div class="h">Get response &amp; enrich</div><div class="n">4 Actions</div></div>
+    <div class="link"></div>
+    <div class="act var"><span class="ico">{x}</span>Initialize variable "ExpectedRowsCount"</div>
+    <div class="link"></div>
+    <div class="act var"><span class="ico">{x}</span>Initialize variable "RowsInsertedCount"</div>
+    <div class="link"></div>
+    <div class="scope"><div class="h">1st Updates</div><div class="n">4 Actions</div></div>
+    <div class="link"></div>
+    <div class="scope"><div class="h">2nd Updates</div><div class="n">3 Actions</div></div>
+    <div class="link"></div>
+    <div class="scope"><div class="h">3rd Updates</div><div class="n">3 Actions</div></div>
+    <div class="link"></div>
+    <div class="scope"><div class="h">4th Updates</div><div class="n">2 Actions</div></div>
+    <div class="link"></div>
+    <div class="fork">
+      <div class="col">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <div class="lbl">runs if any Updates scope fails</div>
+        <div class="scope"><div class="h">Notifications upon Failure</div><div class="n">6 Actions</div></div>
+      </div>
+      <div class="col">
+        <div class="dots ok"><i></i><i></i><i></i></div>
+        <div class="lbl">runs on success</div>
+        <div class="act var"><span class="ico">{x}</span>Output of Rows Inserted Count</div>
+        <div class="link"></div>
+        <div class="act var"><span class="ico">{x}</span>Output of Expected Rows Count</div>
+        <div class="link"></div>
+        <div class="scope cond"><div class="h">Condition: Expected ≠ Inserted</div><div class="n">2 Cases</div></div>
+      </div>
+    </div>
+  </div></div>
+</div></body></html>

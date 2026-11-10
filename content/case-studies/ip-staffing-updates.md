@@ -14,8 +14,8 @@ metrics:
     note: "9,940 responses over ~530 business days since launch"
   - value: "0"
     label: "manual database entries"
-  - value: "800–1,650 hrs"
-    label: "manual handling avoided (est.)"
+  - value: "800–1,650"
+    label: "hours of manual handling avoided (est.)"
     note: "Assumes 5–10 min per request to read an email, clarify, and key in the change"
 order: 1
 featured: true
@@ -129,8 +129,3 @@ flowchart TD
   <img src="/case-studies/ip-staffing-updates/teams-alert.webp" alt="Teams adaptive card alerting that a flow failed" loading="lazy" />
   <figcaption>Failure alert in Teams, with deep links to the failed run and the form responses.</figcaption>
 </figure>
-
-## What I'd do next
-
-- Collapse the repeated insert blocks into a child flow or a single parameterized insert, so a schema change means editing one action instead of 24.
-- Add a Power BI view of request volume by scope, practice area, and role to help IP Operations plan workload.

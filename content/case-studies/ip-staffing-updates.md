@@ -29,7 +29,7 @@ Requests came in by email to the IP Operations team, and someone made each updat
 
 **Constraints**
 - Requesters aren't technical, so the form has to do the structuring.
-- One request can contain up to **four separate staffing changes**, each for a different practice area and role.
+- One request can contain up to **four separate staffing changes** (two for removals), each for a different practice area and role.
 - Bad data doesn't just fail. It can **change staffing on the wrong matters**, so data integrity mattered more than speed.
 - The database is on-premises, so cloud automation has to reach it through a data gateway.
 
@@ -101,12 +101,34 @@ flowchart TD
 
 *Hours avoided is an estimate: 9,940 requests at 5–10 minutes of manual handling each.*
 
-## Screenshots & demo
+## Screenshots
 
-<!-- Scrubbed screenshots go in /public/case-studies/ip-staffing-updates/ -->
-<!-- ![Form, first page](/case-studies/ip-staffing-updates/form-intro.png) -->
+*Recreated with sample data. Names, emails, client numbers, and system details are fictional.*
 
-*Screenshots coming soon.*
+<figure>
+  <img src="/case-studies/ip-staffing-updates/form-intro.webp" alt="Microsoft Form design view showing the staffing update request form" loading="lazy" />
+  <figcaption>The intake form: 73 questions, with warnings up front because a bad answer changes real matters.</figcaption>
+</figure>
+
+<figure>
+  <img src="/case-studies/ip-staffing-updates/form-branching.webp" alt="Form branching view showing Go to rules for each answer" loading="lazy" />
+  <figcaption>Branching rules route each requester down a different path by scope, jurisdiction, and practice area.</figcaption>
+</figure>
+
+<figure>
+  <img src="/case-studies/ip-staffing-updates/flow-overview.webp" alt="Power Automate flow overview with scopes for four change sets" loading="lazy" />
+  <figcaption>One flow, top level: enrich, four change-set scopes, then a failure path and a row-count reconciliation.</figcaption>
+</figure>
+
+<figure>
+  <img src="/case-studies/ip-staffing-updates/flow-change-set.webp" alt="Expanded change set showing practice area and role conditions and SQL insert parameters" loading="lazy" />
+  <figcaption>Inside a change set: practice area → role group → Insert row, with form answers mapped to SQL columns.</figcaption>
+</figure>
+
+<figure>
+  <img src="/case-studies/ip-staffing-updates/teams-alert.webp" alt="Teams adaptive card alerting that a flow failed" loading="lazy" />
+  <figcaption>Failure alert in Teams, with deep links to the failed run and the form responses.</figcaption>
+</figure>
 
 ## What I'd do next
 

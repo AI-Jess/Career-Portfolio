@@ -1,0 +1,19 @@
+/* Power Automate designer look-alike */
+.canvas { background-color: #fafafa; background-image: radial-gradient(#d4d4d4 1px, transparent 1px); background-size: 16px 16px; }
+.bar { height: 46px; background: #fff; border-bottom: 1px solid #e6e6e6; display: flex; align-items: center; gap: 22px; padding: 0 16px; font-size: 15px; }
+.bar .t { color: #333; }
+.col { display: flex; flex-direction: column; align-items: center; }
+.link { width: 2px; height: 34px; background: #8a8a8a; position: relative; }
+.link::after { content: '+'; position: absolute; top: 7px; left: -9px; width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 1px solid #5b8bd6; color: #2a64c9; font-size: 14px; line-height: 16px; text-align: center; }
+.link.plain::after { display: none; }
+.act { width: 230px; min-height: 52px; background: #fff; border: 1px solid #dcdcdc; border-left: 4px solid var(--c, #038387); border-radius: 4px; display: flex; gap: 10px; align-items: center; padding: 8px 12px; font-size: 13px; font-weight: 500; line-height: 1.35; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+.ico { flex: none; width: 24px; height: 24px; border-radius: 4px; background: var(--c, #038387); color: #fff; font-size: 11px; display: grid; place-items: center; font-weight: 700; }
+.forms { --c: #038387; } .var { --c: #7a3fd1; } .sql { --c: #ba141a; } .teams { --c: #4b53bc; } .mail { --c: #0f6cbd; } .ctl { --c: #484644; }
+.scope { width: 250px; border: 1px solid #cfcfcf; border-radius: 6px; background: #f6f6f6; }
+.scope > .h { background: #a33b0a; color: #fff; border-radius: 4px; margin: -1px 8px 0; padding: 9px 12px; font-size: 13px; font-weight: 600; display: flex; justify-content: space-between; gap: 8px; }
+.scope > .h::after { content: '⌄'; }
+.scope > .n { text-align: center; font-size: 12px; color: #666; padding: 8px 0 18px; }
+.scope.cond > .h { background: #484644; }
+.dots { display: flex; gap: 2px; justify-content: center; margin: -3px 0 3px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: #d13438; }
+.dots i:nth-child(1) { background: #f7a01b; } .dots.ok i { background: #13a10e; }

@@ -98,3 +98,6 @@ code { font-size: 0.9em; background: var(--surface-2); padding: 0.1em 0.35em; bo
 @media (max-width: 720px) {
   .prose pre.mermaid svg { min-width: 600px; }
 }
+.prose figure { margin: 1.5rem 0 2rem; }
+.prose figure img { display: block; width: 100%; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; }
+.prose figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 0.6rem; }

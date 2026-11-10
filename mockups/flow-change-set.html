@@ -1,0 +1,81 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><link rel="stylesheet" href="shared.css"><link rel="stylesheet" href="flow.css">
+<style>
+  #shot { width: 1500px; }
+  .wrap { display: grid; grid-template-columns: 1fr 470px; }
+  .area { padding: 30px 20px 40px; }
+  .big { border: 1px solid #cfcfcf; border-radius: 6px; background: rgba(246,246,246,.85); padding: 0 18px 22px; }
+  .big > .h { background: #a33b0a; color: #fff; border-radius: 4px; margin: -1px auto 18px; width: 250px; padding: 9px 12px; font-size: 13px; font-weight: 600; }
+  .par { display: flex; gap: 16px; align-items: flex-start; justify-content: center; }
+  .cbox { border: 1px solid #cfcfcf; border-radius: 6px; background: #fff; padding: 0 12px 16px; }
+  .cbox > .h { background: #484644; color: #fff; border-radius: 4px; margin: -1px auto 14px; width: 220px; padding: 9px 12px; font-size: 12.5px; font-weight: 600; }
+  .tf { display: flex; gap: 14px; }
+  .tf .col { min-width: 250px; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 3px; margin-bottom: 10px; }
+  .tag.t { background: #dff6dd; color: #0e700e; } .tag.f { background: #fde7e9; color: #a4262c; }
+  .act { width: 220px; }
+  .role { border: 1px solid #d6d6d6; border-radius: 6px; background: #fafafa; padding: 0 10px 12px; }
+  .role > .h { background: #484644; color: #fff; border-radius: 4px; margin: -1px auto 10px; width: 210px; padding: 8px 10px; font-size: 12px; font-weight: 600; }
+  .sel { outline: 2px solid #0f6cbd; outline-offset: 2px; }
+  .mini { width: 210px; }
+  .empty { font-size: 12px; color: #888; padding: 8px 20px; border: 1px dashed #ccc; border-radius: 4px; background: #fff; }
+  .panel { background: #fff; border-left: 1px solid #e0e0e0; padding: 0 0 20px; font-size: 13px; }
+  .panel .ph { display: flex; gap: 10px; align-items: center; padding: 16px 20px; border-bottom: 1px solid #eee; font-weight: 600; font-size: 15px; }
+  .tabs { display: flex; gap: 22px; padding: 10px 20px 0; border-bottom: 1px solid #eee; font-size: 13px; color: #555; }
+  .tabs span { padding-bottom: 8px; } .tabs .on { color: #0f6cbd; border-bottom: 2px solid #0f6cbd; font-weight: 600; }
+  .fld { padding: 10px 20px 0; }
+  .fld label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; }
+  .fld label em { color: #c4314b; font-style: normal; }
+  .in { border: 1px solid #d1d1d1; border-radius: 4px; padding: 6px 8px; min-height: 32px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12.5px; }
+</style></head>
+<body><div id="shot">
+  <div class="bar"><span>← Back</span><span class="t">IP Operations – Staffing Update Form (Entire Client) → SQL</span></div>
+  <div class="wrap">
+  <div class="canvas area">
+    <div class="big"><div class="h">1st Updates</div>
+      <div class="par">
+        <div class="cbox"><div class="h">Entire Client AND Patent</div>
+          <div class="tf">
+            <div class="col"><div class="tag t">True</div>
+              <div class="act var"><span class="ico">{x}</span>Increment ExpectedRowsCount</div>
+              <div class="link"></div>
+              <div class="role"><div class="h">Role group A (Billing / Formalities)</div>
+                <div class="col">
+                  <div class="act sql mini sel"><span class="ico">SQL</span>Insert row (V2)</div>
+                  <div class="link"></div>
+                  <div class="act var mini"><span class="ico">{x}</span>Increment RowsInsertedCount</div>
+                </div></div>
+              <div class="link plain"></div>
+              <div class="act ctl"><span class="ico">◇</span>Role group B (Case Managing / Foreign)</div>
+              <div class="link plain"></div>
+              <div class="act ctl"><span class="ico">◇</span>Role group C (Handling / Supervising)</div>
+            </div>
+            <div class="col" style="min-width:120px"><div class="tag f">False</div><div class="empty">No actions</div></div>
+          </div>
+        </div>
+        <div class="col" style="gap:14px">
+          <div class="scope cond"><div class="h">Entire Client AND Post-Grant</div><div class="n">True · 3 Actions</div></div>
+          <div class="scope cond"><div class="h">Entire Client AND Trademark</div><div class="n">True · 3 Actions</div></div>
+          <div class="scope cond"><div class="h">Entire Client AND N/A</div><div class="n">True · 3 Actions</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="ph"><span class="ico" style="--c:#ba141a">SQL</span>Insert row (V2)</div>
+    <div class="tabs"><span class="on">Parameters</span><span>Settings</span><span>Code view</span><span>About</span></div>
+    <div class="fld"><label>Server name <em>*</em></label><div class="in">Use connection settings (practice-staging)</div></div>
+    <div class="fld"><label>Database name <em>*</em></label><div class="in">Use connection settings (StaffingStaging)</div></div>
+    <div class="fld"><label>Table name <em>*</em></label><div class="in">[dbo].[StaffingUpdateRequests]</div></div>
+    <div class="fld"><label>FormSubmissionID</label><div class="in"><span class="chip"><i></i>Response Id</span></div></div>
+    <div class="fld"><label>SubmittedDtm</label><div class="in"><span class="chip fx"><i></i>Outputs (Local submit time)</span></div></div>
+    <div class="fld"><label>SubmittedBy</label><div class="in"><span class="chip o365"><i></i>Display Name</span></div></div>
+    <div class="fld"><label>Update_Type</label><div class="in"><span class="chip"><i></i>3. Are you updating for the Entire Clie…</span></div></div>
+    <div class="fld"><label>ClientID</label><div class="in"><span class="chip"><i></i>6. List client number(s)</span></div></div>
+    <div class="fld"><label>Attorney_Name</label><div class="in"><span class="chip"><i></i>7. Attorney name</span></div></div>
+    <div class="fld"><label>AOL</label><div class="in"><span class="chip"><i></i>8. Area of law</span></div></div>
+    <div class="fld"><label>Role</label><div class="in"><span class="chip"><i></i>9. Patent role</span></div></div>
+    <div class="fld"><label>Jurisdiction</label><div class="in"><span class="chip"><i></i>4. Which jurisdiction is the update f…</span></div></div>
+  </div>
+  </div>
+</div></body></html>

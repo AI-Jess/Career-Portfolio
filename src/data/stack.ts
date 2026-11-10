@@ -49,22 +49,21 @@ export const software: StackGroup[] = [
   },
 ];
 
-// TODO: fill in your real gear. Placeholders below show the format.
 export const setup: StackGroup[] = [
   {
-    title: 'Desk',
+    title: 'Displays',
     items: [
-      { name: '[Ultrawide monitor model]', note: 'Flow designer and SQL side by side' },
-      { name: '[Desk / standing desk]' },
-      { name: '[Chair]' },
+      { name: 'Philips Brilliance 499P', note: '49" super-ultrawide. Flow designer, run history, and SQL side by side' },
+      { name: 'Vertical monitor', note: 'Long expressions, documentation, and Teams' },
+      { name: 'Landscape monitor', note: 'Email, calendar, and reference' },
     ],
   },
   {
-    title: 'Peripherals',
+    title: 'Audio & mobile',
     items: [
-      { name: '[Keyboard]' },
-      { name: '[Mouse]' },
-      { name: '[Webcam / mic / headset]' },
+      { name: 'Bose headphones', note: 'Focus time and calls' },
+      { name: 'AirPods Pro' },
+      { name: 'iPad', note: 'Sketching flows and notes' },
     ],
   },
 ];

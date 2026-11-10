@@ -1,0 +1,14 @@
+/* Shared styles for recreated UI mockups (sample data only). */
+@font-face {
+  font-family: 'UI';
+  src: url('../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'UI', 'Segoe UI', system-ui, sans-serif; color: #242424; background: #fff; -webkit-font-smoothing: antialiased; }
+#shot { display: inline-block; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 4px; border-radius: 4px; font-size: 12px; background: #e7f1ee; color: #1b4f45; border: 1px solid #c6ddd6; white-space: nowrap; }
+.chip i { width: 14px; height: 14px; border-radius: 3px; background: #038387; display: inline-block; }
+.chip.fx { background: #eef0fb; color: #3b3a8f; border-color: #d6d8f3; }
+.chip.fx i { background: #6b69d6; }
+.chip.o365 i { background: #d83b01; }

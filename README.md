@@ -9,6 +9,10 @@ Portfolio site for Power Platform + AI work in legal operations. Built with Astr
 4. Diagrams: use a fenced ```` ```mermaid ```` block. They render in the site's colors.
 5. Set `draft: true` to hide a case study, `featured: true` to show it on the home page.
 
+## Screenshot mock-ups
+Real screenshots contain firm data, so UI screenshots are recreated as HTML in `mockups/` with sample data.
+Re-render with `node mockups/render.cjs ip-staffing-updates` (outputs WebP to `public/case-studies/<slug>/`).
+
 ## Edit other content
 - Name, tagline, LinkedIn URL: `src/data/site.ts`
 - Stack page (software + desk setup): `src/data/stack.ts`

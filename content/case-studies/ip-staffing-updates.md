@@ -1,6 +1,6 @@
 ---
 title: "Self-Service Staffing Updates for IP Operations"
-summary: "A 73-question Microsoft Form feeding four Power Automate flows that write validated staffing changes to SQL Server, where an Intapp Integration Builder rule applies them to the firm's IP management system."
+summary: "A 73-question Microsoft Form feeding four Power Automate flows that write validated staffing changes to SQL Server, where an Intapp Integration Builder rule applies them to the firm's IP management and practice management systems."
 org: "A large IP law firm"        # one-line switch if you decide to name the firm
 role: "Requirements, design, build, testing, and support (solo)"
 launched: 2024-11-01
@@ -9,9 +9,9 @@ tools: [Power Automate, Microsoft Forms, SQL Server, On-premises data gateway, I
 metrics:
   - value: "9,900+"
     label: "requests processed"
-  - value: "~13"
+  - value: "~19"
     label: "requests per business day"
-    note: "9,940 responses over ~740 business days"
+    note: "9,940 responses over ~530 business days since launch"
   - value: "0"
     label: "manual database entries"
   - value: "800–1,650 hrs"
@@ -25,7 +25,7 @@ featured: true
 
 IP Operations needed a reliable way for attorneys and staff to request **staffing changes on patent and trademark matters**: who is the handling attorney, supervising attorney, paralegal, or billing contact. These changes can apply to a whole client, a matter family, or a single matter.
 
-Requests came in by email to the IP Operations team, and someone made each update by hand. There was no structured intake. An Intapp Integration Builder rule already existed that could apply staffing changes to the firm's IP management system (Foundation IP), but it only reads from a SQL Server table. The gap was getting accurate, well-formed requests *into* that table without anyone re-keying them.
+Requests came in by email to the IP Operations team, and someone made each update by hand. There was no structured intake. An Intapp Integration Builder rule already existed that could apply staffing changes to the firm's IP management system (Foundation IP) and practice management system, but it only reads from a SQL Server table. The gap was getting accurate, well-formed requests *into* that table without anyone re-keying them.
 
 **Constraints**
 - Requesters aren't technical, so the form has to do the structuring.
@@ -59,7 +59,7 @@ flowchart LR
     P1 & P2 & P3 & P4 --> GW[On-prem<br/>data gateway]
     GW --> DB[(SQL Server<br/>staging table)]
     DB --> IB[Integration<br/>Builder rule]
-    IB --> SYS[Foundation IP]
+    IB --> SYS[IP management &<br/>practice management]
     P1 & P2 & P3 & P4 -.-> A[Teams + email<br/>alerts]
 ```
 

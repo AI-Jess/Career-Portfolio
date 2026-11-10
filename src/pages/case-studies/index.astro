@@ -1,0 +1,20 @@
+---
+import Base from '../../layouts/Base.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import { getCollection } from 'astro:content';
+
+const cases = (await getCollection('caseStudies', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order || +b.data.launched - +a.data.launched);
+---
+<Base title="Case studies" description="Power Platform and AI automation case studies for legal operations.">
+  <section class="wrap page">
+    <h1>Case studies</h1>
+    <p class="muted lede">Each one follows the same shape: the problem, what I built, how it works, and what changed.</p>
+    <div class="grid">{cases.map((c) => <CaseCard entry={c} />)}</div>
+  </section>
+</Base>
+<style>
+  .page { padding-top: 3rem; }
+  .lede { max-width: 60ch; margin-bottom: 2rem; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+</style>

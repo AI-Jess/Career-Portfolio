@@ -1,0 +1,38 @@
+---
+// Renders ```mermaid code blocks in case studies, themed to the site palette.
+// Only loaded on pages that include this component.
+---
+<script>
+  async function render() {
+    const codes = document.querySelectorAll<HTMLElement>('pre > code.language-mermaid, pre[data-language="mermaid"]');
+    if (!codes.length) return;
+    const blocks = Array.from(codes).map((el) => (el.tagName === 'CODE' ? el.parentElement! : el));
+    const { default: mermaid } = await import('mermaid');
+    const css = getComputedStyle(document.documentElement);
+    const v = (n: string) => css.getPropertyValue(n).trim();
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'base',
+      fontFamily: 'Inter Variable, system-ui, sans-serif',
+      flowchart: { curve: 'basis', htmlLabels: true },
+      themeVariables: {
+        background: v('--surface'),
+        primaryColor: v('--accent-soft'),
+        primaryTextColor: v('--text'),
+        primaryBorderColor: v('--accent'),
+        lineColor: v('--muted'),
+        secondaryColor: v('--surface-2'),
+        tertiaryColor: v('--surface'),
+        edgeLabelBackground: v('--surface'),
+        fontSize: '15px',
+      },
+    });
+    blocks.forEach((pre) => {
+      const src = pre.textContent ?? '';
+      pre.textContent = src;
+      pre.classList.add('mermaid');
+    });
+    await mermaid.run({ nodes: blocks });
+  }
+  render();
+</script>

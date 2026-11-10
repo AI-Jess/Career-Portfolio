@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import CaseCard from '../components/CaseCard.astro';
+import { getCollection } from 'astro:content';
+import { site } from '../data/site';
+
+const cases = (await getCollection('caseStudies', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order || +b.data.launched - +a.data.launched);
+const featured = cases.filter((c) => c.data.featured).slice(0, 3);
+const skills = ['Power Automate', 'Power Apps', 'Power BI', 'Copilot Studio', 'SQL Server', 'Microsoft Forms', 'SharePoint', 'Teams'];
+---
+<Base>
+  <section class="wrap hero">
+    <p class="eyebrow">{site.role} · {site.focus}</p>
+    <h1>{site.tagline}</h1>
+    <p class="muted intro">
+      Business Analyst turned builder. I start with the process, then automate it end to end:
+      requirements, design, build, testing, and support.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="/case-studies/">See case studies</a>
+      <a class="btn" href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <ul class="chips skills">{skills.map((s) => <li>{s}</li>)}</ul>
+  </section>
+
+  <section class="wrap">
+    <div class="head">
+      <h2>Featured work</h2>
+      <a href="/case-studies/">All case studies →</a>
+    </div>
+    <div class="grid">{featured.map((c) => <CaseCard entry={c} />)}</div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-top: clamp(3rem, 9vw, 6rem); padding-bottom: 3rem; }
+  .hero h1 { max-width: 22ch; font-size: clamp(1.9rem, 4.6vw, 2.9rem); }
+  .intro { max-width: 60ch; font-size: 1.1rem; }
+  .cta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0; }
+  .skills { margin-top: 1.5rem; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+</style>

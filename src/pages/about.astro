@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="About" description={`About ${site.name}: Business Analyst turned Power Platform and AI developer for legal operations.`}>
+  <section class="wrap page prose">
+    <h1>About</h1>
+    <p>
+      I'm a Business Analyst at a large IP law firm, moving into hands-on development with
+      Power Automate, Power Apps, Power BI, and Copilot agents. My focus is legal operations:
+      the intake, data, and hand-offs that keep matters moving.
+    </p>
+    <p>
+      Coming from the BA side means I start with the process, not the tool. I gather requirements
+      with the people doing the work, design the solution, build and test it, and support it in
+      production.
+    </p>
+    <h2>Recent work</h2>
+    <ul>
+      <li>Designed and built a Forms-to-SQL automation for IP Operations that has processed close to 10,000 staffing update requests.</li>
+      <li>Helped implement the firm's intranet on Infodash and built Power Automate flows for the Marketing team on it.</li>
+    </ul>
+    <p>
+      <a class="btn primary" href={site.linkedin} target="_blank" rel="noopener">Connect on LinkedIn</a>
+      {site.resumePdf && <a class="btn" href={site.resumePdf}>Résumé (PDF)</a>}
+    </p>
+  </section>
+</Base>
+<style>
+  .page { padding-top: 3rem; }
+  .btn { margin: 0.5rem 0.5rem 0 0; }
+</style>

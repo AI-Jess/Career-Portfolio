@@ -1,15 +1,19 @@
 @import '@fontsource-variable/inter';
 
 :root {
-  --bg: #fbfbf9;
+  /* Brand palette: blue #8AABDA, green #AADAC3, sky #A2D0E6, mint #CCE9E2.
+     Light mode uses a deeper brand blue for text/buttons so it stays readable (AA). */
+  --brand-blue: #8aabda;
+  --brand-green: #aadac3;
+  --bg: #fafbfc;
   --surface: #ffffff;
-  --surface-2: #f2f3f1;
-  --text: #16201f;
-  --muted: #5a6664;
-  --border: #e1e4e1;
-  --accent: #0f6b66;
+  --surface-2: #f1f4f8;
+  --text: #141a22;
+  --muted: #586273;
+  --border: #dfe4ec;
+  --accent: #3a5f9f;
   --accent-ink: #ffffff;
-  --accent-soft: #e3f1ef;
+  --accent-soft: #e4f3ec;
   --warn: #a4400d;
   --warn-soft: #fdf1e9;
   --warn-border: #f2c9ad;
@@ -21,15 +25,15 @@
 
 /* Light is the default. Dark applies only when the visitor picks it (see Base.astro). */
 :root[data-theme='dark'] {
-  --bg: #0f1413;
-  --surface: #161c1b;
-  --surface-2: #1d2524;
-  --text: #e8eeec;
-  --muted: #9aa8a5;
-  --border: #2a3432;
-  --accent: #4fc2b8;
-  --accent-ink: #0f1413;
-  --accent-soft: #17302d;
+  --bg: #10161b;
+  --surface: #161d24;
+  --surface-2: #1c252e;
+  --text: #e7edf3;
+  --muted: #9aa6b4;
+  --border: #29333e;
+  --accent: #8aabda;
+  --accent-ink: #10161b;
+  --accent-soft: #1a2e2a;
   --warn: #f3a273;
   --warn-soft: #2b1d15;
   --warn-border: #5a3420;

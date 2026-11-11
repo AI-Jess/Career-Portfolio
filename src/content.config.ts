@@ -10,6 +10,8 @@ const caseStudies = defineCollection({
     org: z.string(),
     role: z.string(),
     launched: z.coerce.date(),
+    published: z.coerce.date().optional(),
+    metricsAsOf: z.coerce.date().optional(),
     status: z.string().optional(),
     tools: z.array(z.string()),
     metrics: z

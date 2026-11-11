@@ -11,7 +11,10 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
-const launched = d.launched.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const fmt = (dt: Date, day = false) => dt.toLocaleDateString('en-US', { month: 'long', ...(day ? { day: 'numeric' } : {}), year: 'numeric', timeZone: 'UTC' });
+const launched = fmt(d.launched);
+const published = d.published ? fmt(d.published, true) : null;
+const asOf = d.metricsAsOf ? fmt(d.metricsAsOf, true) : null;
 ---
 <Base title={d.title} description={d.summary}>
   <article class="wrap page"><div class="col">
@@ -24,6 +27,7 @@ const launched = d.launched.toLocaleDateString('en-US', { month: 'long', year: '
       <div><dt>Role</dt><dd>{d.role}</dd></div>
       <div><dt>Launched</dt><dd>{launched}</dd></div>
       {d.status && <div><dt>Status</dt><dd>{d.status}</dd></div>}
+      {published && <div><dt>Case study published</dt><dd><time datetime={d.published!.toISOString().slice(0, 10)}>{published}</time></dd></div>}
       <div class="tools"><dt>Tools</dt><dd><ul class="chips">{d.tools.map((t) => <li>{t}</li>)}</ul></dd></div>
     </dl>
 
@@ -37,6 +41,9 @@ const launched = d.launched.toLocaleDateString('en-US', { month: 'long', year: '
           </li>
         ))}
       </ul>
+    )}
+    {d.metrics.length > 0 && asOf && (
+      <p class="asof muted">Figures as of <time datetime={d.metricsAsOf!.toISOString().slice(0, 10)}>{asOf}</time>.</p>
     )}
 
     <div class="prose"><Content /></div>
@@ -64,6 +71,7 @@ const launched = d.launched.toLocaleDateString('en-US', { month: 'long', year: '
   .meta dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
   .meta dd { margin: 0.2rem 0 0; font-size: 0.95rem; }
   .meta .tools { grid-column: 1 / -1; }
+  .asof { font-size: 0.82rem; margin: -1.25rem 0 2rem; }
   .metrics { list-style: none; padding: 0; margin: 1rem 0 2rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); }
   .metrics li { padding: 1.25rem; display: flex; flex-direction: column; gap: 0.2rem; }
   .metrics span { font-size: 0.92rem; line-height: 1.4; }

@@ -1,6 +1,6 @@
 // Single source of truth for personal details. Edit here, not in pages.
 export const site = {
-  name: 'Jess Van Wyhe',
+  name: 'Jess J. Van Wyhe',
   role: 'Power Platform & AI Developer',
   focus: 'Legal operations automation',
   tagline:

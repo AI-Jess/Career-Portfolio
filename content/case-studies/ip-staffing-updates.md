@@ -1,6 +1,6 @@
 ---
 title: "Self-Service Staffing Updates for IP Operations"
-summary: "A 73-question Microsoft Form feeding four Power Automate flows that write validated staffing changes to SQL Server, where an Intapp Integration Builder rule applies them to the firm's IP management and practice management systems."
+summary: "IP Operations was reviewing every staffing request by hand and updating two firm systems manually. I automated the work after the form: each response now updates both systems on its own, and failures are flagged right away."
 org: "A large IP law firm"        # one-line switch if you decide to name the firm
 role: "Requirements, design, build, testing, and support (solo)"
 launched: 2024-11-01
@@ -13,119 +13,138 @@ metrics:
     label: "requests per business day"
     note: "9,940 responses over ~530 business days since launch"
   - value: "0"
-    label: "manual database entries"
+    label: "responses re-keyed by hand"
   - value: "800–1,650"
-    label: "hours of manual handling avoided (est.)"
-    note: "Assumes 5–10 min per request to read an email, clarify, and key in the change"
+    label: "hours of manual work avoided (est.)"
+    note: "Assumes 5–10 minutes per request to review a response and update both systems by hand"
 order: 1
 featured: true
 ---
 
 ## The problem
 
-IP Operations needed a reliable way for attorneys and staff to request **staffing changes on patent and trademark matters**: who is the handling attorney, supervising attorney, paralegal, or billing contact. These changes can apply to a whole client, a matter family, or a single matter.
+At a law firm, every patent and trademark **matter** (a client's case or file) has a team assigned to it: a handling attorney, a supervising attorney, paralegals, and a billing contact. People change roles, join, and leave, so those assignments need updating constantly. The IP Operations team is responsible for keeping them accurate.
 
-Requests came in by email to the IP Operations team, and someone made each update by hand. There was no structured intake. An Intapp Integration Builder rule already existed that could apply staffing changes to the firm's IP management system (Foundation IP) and practice management system, but it only reads from a SQL Server table. The gap was getting accurate, well-formed requests *into* that table without anyone re-keying them.
+In early 2024, IP Operations built a **Microsoft Form with 73 questions** so attorneys and staff could request these staffing changes in a consistent way. A request can cover a whole client, a group of related matters (a "family"), or a single matter.
 
-**Constraints**
-- Requesters aren't technical, so the form has to do the structuring.
-- One request can contain up to **four separate staffing changes** (two for removals), each for a different practice area and role.
-- Bad data doesn't just fail. It can **change staffing on the wrong matters**, so data integrity mattered more than speed.
-- The database is on-premises, so cloud automation has to reach it through a data gateway.
+The form solved how requests came in, but not what happened next. **For every response, someone on IP Operations had to:**
+1. Read and check the response by hand.
+2. Log in to the firm's IP management system and make the change.
+3. Make the same change again in the firm's practice management system.
+
+That's two systems updated by hand, for every request, at a volume that now averages about 19 requests per business day.
+
+**What made it tricky**
+- **One response can hold up to four separate changes** (two for removals), each for a different practice area and role.
+- **Mistakes are costly.** A wrong update doesn't just fail; it can change who is assigned to the wrong matters. Accuracy mattered more than speed.
+- **The firm's database sits on its own servers**, not in the cloud, so the automation needed a secure way to reach it.
 
 ## What I built
 
-A Microsoft Forms → Power Automate → SQL Server pipeline that turns each form submission into one or more clean, structured rows for the existing Integration Builder rule to pick up.
+### Already in place (built by IP Operations)
+- **The Microsoft Form (73 questions).** Requesters answer questions that branch based on their earlier answers, so the form collects exactly the details each type of change needs.
+- **The database table.** A table in the firm's SQL Server database, designed to hold one row per staffing change.
 
-- **1 Microsoft Form, 73 questions**, branched by update scope, practice area, and role.
-- **4 Power Automate flows**, one per update scope: **Entire Client, Family, Matter, and Removal**. Splitting by scope keeps each flow testable and stops a change to one path from breaking the others.
-- **Up to 24 conditional insert paths per flow**, routing each change to the correct row shape based on practice area (patent prosecution, post-grant, trademark, or not applicable) and role.
-- **Built-in reconciliation**: each flow compares the number of rows it *expected* to write with the number it *actually* wrote, and alerts an admin if they differ.
-- **Failure alerting**: a Teams adaptive card and an email, both with a deep link to the failed run and the submission ID.
+### What I built
+- **Four automated flows in Power Automate**, one for each type of request: **Entire Client, Family, Matter, and Removal**. Each flow starts the moment someone submits the form. Keeping them separate means a change to one type of request can't break the others.
+- **The routing logic inside each flow.** It reads the response, splits it into its separate changes, works out which practice area and role each change applies to, and saves each one as a correctly shaped row in the database table. A single flow has up to 24 of these paths.
+- **The Integration Builder rule.** Intapp Integration Builder is a tool that moves data between the firm's systems. I built the rule that picks up each new row from the database table and applies the change to both the IP management system and the practice management system.
+- **The requester lookup.** The flow looks up the requester's name from their Microsoft 365 sign-in, so nobody has to type it and it can't be misspelled.
+- **A completeness check.** Each flow counts how many changes it *should* save and how many it *actually* saved. If the numbers don't match, it raises a failure notice.
+- **Failure notifications to two audiences.** If anything goes wrong, a notice goes to:
+  1. **Our internal Teams channel**, where my department monitors every flow we build.
+  2. **The IP Operations stakeholders**, so they know right away that a request failed and that we're already troubleshooting it.
 
-**My role:** I gathered requirements with IP Operations, designed the flow architecture, built and tested all four flows, and own ongoing support and enhancements. The IP Operations team created the SQL table and the form questions.
+  Each notice includes a direct link to the failed run and the form response, so whoever picks it up can go straight to the problem.
+
+**My role:** I gathered the requirements with IP Operations, designed the solution, built and tested the flows and the Integration Builder rule, and support and improve it in production.
 
 ## How it works
 
-### System view
+### The big picture
 
 ```mermaid
 flowchart LR
-    F[Microsoft Form<br/>73 questions] --> R{Update<br/>scope}
-    R --> P1[Entire Client]
-    R --> P2[Family]
-    R --> P3[Matter]
-    R --> P4[Removal]
-    P1 & P2 & P3 & P4 --> GW[On-prem<br/>data gateway]
-    GW --> DB[(SQL Server<br/>staging table)]
-    DB --> IB[Integration<br/>Builder rule]
-    IB --> SYS[IP management &<br/>practice management]
-    P1 & P2 & P3 & P4 -.-> A[Teams + email<br/>alerts]
+    F["Requester submits<br/>the form"] --> R{"What kind<br/>of change?"}
+    R --> P1["Entire Client<br/>flow"]
+    R --> P2["Family<br/>flow"]
+    R --> P3["Matter<br/>flow"]
+    R --> P4["Removal<br/>flow"]
+    P1 & P2 & P3 & P4 --> DB[("Firm database<br/>one row per change")]
+    DB --> IB["Integration<br/>Builder rule"]
+    IB --> SYS["IP management +<br/>practice management<br/>systems updated"]
+    P1 & P2 & P3 & P4 -.-> A["Failure notice:<br/>our Teams channel<br/>+ IP Operations"]
 ```
+
+1. Someone submits the form.
+2. Based on the kind of change, one of the four flows picks it up.
+3. The flow saves each change as a row in the firm's database.
+4. The Integration Builder rule reads the new rows and updates both firm systems.
+5. If anything fails along the way, both audiences are notified.
 
 ### Inside one flow
 
 ```mermaid
 flowchart TD
-    T[Trigger: new form response] --> G[Get response details]
-    G --> E[Enrich: local timestamp +<br/>requester name from Office 365]
-    E --> L[For each of up to 4 change sets]
-    L --> PA{Practice area?}
-    PA -->|Patent prosecution| PR{Role group}
-    PA -->|Post-grant| I1[Insert row]
-    PA -->|Trademark| TR{Role group}
-    PA -->|N/A| I2[Insert row]
-    PR --> I3[Insert row]
-    TR --> I4[Insert row]
-    I1 & I2 & I3 & I4 --> C{Expected rows =<br/>inserted rows?}
-    C -->|yes| OK([Done])
-    C -->|no| AL[Alert admin with run link]
+    T["New form response arrives"] --> G["Read the answers"]
+    G --> E["Add the time submitted and<br/>look up the requester's name"]
+    E --> L["Split the response into<br/>its separate changes (up to 4)"]
+    L --> PA{"Which practice area?"}
+    PA -->|Patent| PR{"Which role?"}
+    PA -->|Post-grant| I1["Save the change<br/>to the database"]
+    PA -->|Trademark| TR{"Which role?"}
+    PA -->|Not applicable| I2["Save the change<br/>to the database"]
+    PR --> I3["Save the change<br/>to the database"]
+    TR --> I4["Save the change<br/>to the database"]
+    I1 & I2 & I3 & I4 --> C{"Was every expected<br/>change saved?"}
+    C -->|Yes| OK(["Done"])
+    C -->|No| AL["If anything fails → send a failure<br/>notification to our Teams monitoring<br/>channel and to IP Ops<br/>(with a link to the failed run)"]
 ```
 
-### Design decisions
+### Why it's built this way
 
-| Decision | Why |
+| Choice | Why it matters |
 |---|---|
-| Four flows, one per update scope | The form branches hard on one question. Separate flows mean a smaller blast radius, simpler testing, and run history that's easy to read. |
-| Role-group routing before insert | Different roles populate different columns. Routing first keeps every row in the exact shape the Integration Builder rule expects. |
-| Expected-vs-inserted row count | A flow can "succeed" and still write nothing if a form answer doesn't match any branch. Counting catches silent gaps, not just hard failures. |
-| Deep links in alerts | Whoever triages a failure goes straight to the run and the submission instead of searching run history. |
-| Requester name looked up, not typed | Pulled from Office 365 using the responder's sign-in, so it can't be misspelled. |
+| Four flows instead of one | The form splits early on the kind of change. Separate flows are easier to test, and a fix to one can't break the others. |
+| Sorting by practice area and role before saving | Different roles fill in different fields. Sorting first means every row arrives in exactly the shape the Integration Builder rule expects. |
+| Counting expected vs. saved changes | A flow can finish without an error and still miss a change if an answer doesn't match any path. The count catches those quiet misses. |
+| Notifying two audiences | My team can start fixing the problem, and IP Operations isn't left wondering whether a request went through. |
+| Looking up the requester's name | It comes from their sign-in, so it's always accurate. |
 
 ## Results
 
-- **In production since November 2024.** Close to **10,000 submissions** have gone through the form.
-- **Every request lands in SQL automatically.** IP Operations no longer re-keys staffing changes from email.
-- **Requests arrive structured.** Scope, practice area, role, and attorney are captured as discrete fields, not free text in an email.
-- **Problems surface on their own.** Reconciliation and failure alerts flag a bad run with a direct link to fix it.
+- **In production since November 2024**, with close to **10,000 requests** processed.
+- **No more manual updates for form requests.** IP Operations no longer reviews each response and updates two systems by hand.
+- **Changes arrive complete and consistent.** Every change is saved with the same set of details in the same format.
+- **Problems are flagged immediately.** Failures go straight to the people who fix them and the people who depend on them.
 
-*Hours avoided is an estimate: 9,940 requests at 5–10 minutes of manual handling each.*
+*Hours avoided is an estimate: 9,940 requests at 5–10 minutes of manual work each.*
 
 ## Screenshots
 
 *Recreated with sample data. Names, emails, client numbers, and system details are fictional.*
 
 <figure>
-  <img src="/case-studies/ip-staffing-updates/form-intro.webp" alt="Microsoft Form design view showing the staffing update request form" loading="lazy" />
-  <figcaption>The intake form: 73 questions, with warnings up front because a bad answer changes real matters.</figcaption>
+  <img src="/case-studies/ip-staffing-updates/form-intro.webp" alt="The staffing update request form in Microsoft Forms" loading="lazy" />
+  <figcaption>The request form IP Operations built: 73 questions, with a warning up front because a wrong answer changes real matters.</figcaption>
 </figure>
 
 <figure>
-  <img src="/case-studies/ip-staffing-updates/form-branching.webp" alt="Form branching view showing Go to rules for each answer" loading="lazy" />
-  <figcaption>Branching rules route each requester down a different path by scope, jurisdiction, and practice area.</figcaption>
+  <img src="/case-studies/ip-staffing-updates/form-branching.webp" alt="The form's branching rules, showing which question each answer leads to" loading="lazy" />
+  <figcaption>The form branches: each answer sends the requester to the next question that applies to them.</figcaption>
 </figure>
 
 <figure>
-  <img src="/case-studies/ip-staffing-updates/flow-overview.webp" alt="Power Automate flow overview with scopes for four change sets" loading="lazy" />
-  <figcaption>One flow, top level: enrich, four change-set scopes, then a failure path and a row-count reconciliation.</figcaption>
+  <img src="/case-studies/ip-staffing-updates/flow-overview.webp" alt="One of the four automated flows, shown at the top level" loading="lazy" />
+  <figcaption>One of the four flows I built: read the response, handle up to four changes, then either confirm everything was saved or send a failure notice.</figcaption>
 </figure>
 
 <figure>
-  <img src="/case-studies/ip-staffing-updates/flow-change-set.webp" alt="Expanded change set showing practice area and role conditions and SQL insert parameters" loading="lazy" />
-  <figcaption>Inside a change set: practice area → role group → Insert row, with form answers mapped to SQL columns.</figcaption>
+  <img src="/case-studies/ip-staffing-updates/flow-change-set.webp" alt="One change opened up, showing the practice area and role paths and the database fields being filled in" loading="lazy" />
+  <figcaption>One change, opened up: practice area, then role, then save. The panel on the right shows each form answer being placed into a database field.</figcaption>
 </figure>
 
 <figure>
-  <img src="/case-studies/ip-staffing-updates/teams-alert.webp" alt="Teams adaptive card alerting that a flow failed" loading="lazy" />
-  <figcaption>Failure alert in Teams, with deep links to the failed run and the form responses.</figcaption>
+  <img src="/case-studies/ip-staffing-updates/teams-alert.webp" alt="A failure notice posted in a Microsoft Teams channel" loading="lazy" />
+  <figcaption>A failure notice in our Teams monitoring channel. IP Operations is notified at the same time, so both teams know a fix is underway.</figcaption>
 </figure>

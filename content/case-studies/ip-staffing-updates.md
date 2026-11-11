@@ -4,6 +4,8 @@ summary: "IP Operations was reviewing every staffing request by hand and updatin
 org: "A large IP law firm"        # one-line switch if you decide to name the firm
 role: "Requirements, design, build, testing, and support (solo)"
 launched: 2024-11-01
+published: 2026-11-10
+metricsAsOf: 2026-11-10   # date the response count (9,940) was taken; update with new numbers
 status: "In production"
 tools: [Power Automate, Microsoft Forms, SQL Server, On-premises data gateway, Intapp Integration Builder, Foundation IP, Microsoft Teams]
 metrics:
@@ -137,7 +139,7 @@ flowchart TD
 
 ## Results
 
-- **In production since November 2024**, with close to **10,000 requests** processed.
+- **In production since November 2024**, with close to **10,000 requests** processed as of November 2026.
 - **Every qualifying change is written to the database automatically, with no manual re-entry.** A change qualifies when its practice area and role match one of the flow's paths. Anything that doesn't match is caught by the completeness check and flagged, not lost.
 - **IP Operations no longer updates both systems by hand** for these requests. The Integration Builder rule applies each saved change to both.
 - **Changes arrive complete and consistent.** Every saved change has the same set of details in the same format.

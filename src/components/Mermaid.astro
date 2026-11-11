@@ -4,17 +4,24 @@
 ---
 <script>
   async function render() {
-    const codes = document.querySelectorAll<HTMLElement>('pre > code.language-mermaid, pre[data-language="mermaid"]');
+    const codes = document.querySelectorAll<HTMLElement>('pre > code.language-mermaid, pre[data-language="mermaid"], pre[data-src]');
     if (!codes.length) return;
-    const blocks = Array.from(codes).map((el) => (el.tagName === 'CODE' ? el.parentElement! : el));
+    const blocks = [...new Set(Array.from(codes).map((el) => (el.tagName === 'CODE' ? el.parentElement! : el)))];
     const { default: mermaid } = await import('mermaid');
+    // Keep the original diagram source so it can be re-drawn when the theme changes
+    blocks.forEach((pre) => {
+      if (!pre.dataset.src) pre.dataset.src = pre.textContent ?? '';
+      pre.removeAttribute('data-processed');
+      pre.textContent = pre.dataset.src;
+      pre.classList.add('mermaid');
+    });
     const css = getComputedStyle(document.documentElement);
     const v = (n: string) => css.getPropertyValue(n).trim();
     mermaid.initialize({
       startOnLoad: false,
       theme: 'base',
       fontFamily: 'Inter Variable, system-ui, sans-serif',
-      flowchart: { curve: 'basis', htmlLabels: true },
+      flowchart: { curve: 'basis', htmlLabels: true, wrappingWidth: 320 },
       themeVariables: {
         background: v('--surface'),
         primaryColor: v('--accent-soft'),
@@ -27,12 +34,8 @@
         fontSize: '15px',
       },
     });
-    blocks.forEach((pre) => {
-      const src = pre.textContent ?? '';
-      pre.textContent = src;
-      pre.classList.add('mermaid');
-    });
     await mermaid.run({ nodes: blocks });
   }
   render();
+  window.addEventListener('themechange', () => render());
 </script>

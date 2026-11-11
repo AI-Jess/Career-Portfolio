@@ -28,6 +28,14 @@ const nav = [
     <meta property="og:type" content="website" />
     <link rel="canonical" href={new URL(path, Astro.site)} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // Apply the saved theme before first paint. Light is the default.
+      (function () {
+        var t = 'light';
+        try { if (localStorage.getItem('theme') === 'dark') t = 'dark'; } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -37,6 +45,10 @@ const nav = [
           {nav.map((n) => (
             <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>
           ))}
+          <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <svg class="moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></svg>
+          </button>
         </nav>
       </div>
     </header>
@@ -52,13 +64,38 @@ const nav = [
   </body>
 </html>
 
+<script>
+  const root = document.documentElement;
+  const btn = document.querySelector<HTMLButtonElement>('.theme-toggle');
+  const sync = () => {
+    const dark = root.getAttribute('data-theme') === 'dark';
+    const label = dark ? 'Switch to light mode' : 'Switch to dark mode';
+    btn?.setAttribute('aria-label', label);
+    btn?.setAttribute('title', label);
+  };
+  sync();
+  btn?.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) { /* storage blocked: still works for this page view */ }
+    sync();
+    window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+  });
+</script>
+
 <style>
   .site-header { border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 10; }
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 64px; flex-wrap: wrap; }
   .brand { font-weight: 700; color: var(--text); text-decoration: none; letter-spacing: -0.01em; }
-  nav { display: flex; gap: 1.1rem; flex-wrap: wrap; }
+  nav { display: flex; gap: 1.1rem; flex-wrap: wrap; align-items: center; }
   nav a { color: var(--muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; }
   nav a:hover, nav a[aria-current='page'] { color: var(--text); }
+  .theme-toggle { display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; padding: 0; }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .theme-toggle .sun { display: none; }
+  :global([data-theme='dark']) .theme-toggle .sun { display: block; }
+  :global([data-theme='dark']) .theme-toggle .moon { display: none; }
   main { min-height: 70vh; }
   .site-footer { border-top: 1px solid var(--border); margin-top: 5rem; font-size: 0.9rem; }
   @media (max-width: 560px) {

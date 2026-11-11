@@ -16,20 +16,7 @@
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #0f1413;
-    --surface: #161c1b;
-    --surface-2: #1d2524;
-    --text: #e8eeec;
-    --muted: #9aa8a5;
-    --border: #2a3432;
-    --accent: #4fc2b8;
-    --accent-ink: #0f1413;
-    --accent-soft: #17302d;
-    color-scheme: dark;
-  }
-}
+/* Light is the default. Dark applies only when the visitor picks it (see Base.astro). */
 :root[data-theme='dark'] {
   --bg: #0f1413;
   --surface: #161c1b;
@@ -100,4 +87,6 @@ code { font-size: 0.9em; background: var(--surface-2); padding: 0.1em 0.35em; bo
 }
 .prose figure { margin: 1.5rem 0 2rem; }
 .prose figure img { display: block; width: 100%; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; }
+/* Screenshots are light UI; soften their glare slightly in dark mode */
+:root[data-theme='dark'] .prose figure img { filter: brightness(0.92); }
 .prose figcaption { font-size: 0.88rem; color: var(--muted); margin-top: 0.6rem; }

@@ -19,6 +19,25 @@ metrics:
   - value: "800–1,650"
     label: "hours of manual work avoided (est.)"
     note: "Assumes 5–10 minutes per request to review a response and update both systems by hand"
+pipeline:
+  - label: "Microsoft Form"
+    detail: "A requester submits a staffing change through the 73-question form."
+    owner: "IP Ops"
+    icon: form
+  - label: "Power Automate flows"
+    detail: "One of four flows picks up the response, splits it into its separate changes, and saves each one to the database."
+    owner: "me"
+    mine: true
+    icon: flow
+    lanes: [Entire Client, Family, Matter, Removal]
+    failure: "If anything fails, a notice goes to our Teams monitoring channel and to IP Operations."
+  - label: "Database + Integration Builder"
+    detail: "Each change is saved as one row. The Integration Builder rule picks up the new rows."
+    owner: "IP Ops"
+    icon: database
+  - label: "Firm systems updated"
+    detail: "The change is applied to the IP management system and the practice management system."
+    icon: systems
 order: 1
 featured: true
 ---

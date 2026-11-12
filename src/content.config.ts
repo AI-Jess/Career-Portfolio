@@ -17,6 +17,18 @@ const caseStudies = defineCollection({
     metrics: z
       .array(z.object({ value: z.string(), label: z.string(), note: z.string().optional() }))
       .default([]),
+    // Optional: steps of the system, left to right. Drives the interactive 3D scene at the top of the page.
+    pipeline: z
+      .array(z.object({
+        label: z.string(),
+        detail: z.string(),
+        owner: z.string().optional(),            // e.g. "IP Ops"
+        mine: z.boolean().default(false),        // highlight the part I built
+        icon: z.enum(['form', 'flow', 'database', 'systems', 'generic']).default('generic'),
+        lanes: z.array(z.string()).default([]),  // parallel paths inside this step
+        failure: z.string().optional(),          // what happens when this step fails
+      }))
+      .default([]),
     order: z.number().default(100),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),

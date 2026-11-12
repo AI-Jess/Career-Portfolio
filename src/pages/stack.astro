@@ -1,58 +1,123 @@
 ---
 import Base from '../layouts/Base.astro';
-import { software, setup, setupPhoto, type StackGroup } from '../data/stack';
+import CtaBand from '../components/CtaBand.astro';
+import { software, setup, setupPhoto } from '../data/stack';
 
 const hasAffiliate = setup.some((g) => g.items.some((i) => i.affiliate));
-const sections: { id: string; title: string; intro: string; groups: StackGroup[] }[] = [
-  { id: 'software', title: 'Software', intro: 'What I build with day to day.', groups: software },
-  { id: 'setup', title: 'Setup', intro: 'The physical desk behind the flows.', groups: setup },
-];
+const gear = setup.flatMap((g) => g.items).filter((i) => i.model);
 ---
-<Base title="Stack" description="The software I build with and the desk setup I build on.">
-  <section class="wrap page">
-    <h1>Stack</h1>
-    <p class="muted lede">Tools I use to design, build, and support automations, plus the hardware on my desk.</p>
-    <nav class="jump"><a href="#software">Software</a><a href="#setup">Setup</a></nav>
-
-    {sections.map((s) => (
-      <section id={s.id}>
-        <h2>{s.title}</h2>
-        <p class="muted">{s.intro}</p>
-        {s.id === 'setup' && setupPhoto && <img class="photo" src={setupPhoto.src} alt={setupPhoto.alt} />}
-        <div class="groups">
-          {s.groups.map((g) => (
-            <div class="card group">
-              <h3>{g.title}</h3>
-              <ul>
-                {g.items.map((i) => (
-                  <li>
-                    {i.link
-                      ? <a href={i.link} target="_blank" rel={i.affiliate ? 'sponsored noopener' : 'noopener'}>{i.name}</a>
-                      : <span class="name">{i.name}</span>}
-                    {i.note && <span class="muted note">{i.note}</span>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+<Base title="Stack" description="The software I build with and the desk setup I build on." stage>
+  <!-- Dark stage: the desk as a 3D scene you can look around -->
+  <section class="stage stage-round stack-stage" data-stage>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="wrap head">
+      <p class="eyebrow">Stack</p>
+      <h1>The tools, and the <span class="grad-text">desk behind them.</span></h1>
+      <p class="lead">What I use to design, build, and support automations, plus the hardware it all runs on.</p>
+    </div>
+    <div class="desk-bleed">
+      <div class="desk" data-scene="desk">
+        <div class="desk-view">
+          <canvas class="stage-canvas" aria-hidden="true"></canvas>
+          <span class="desk-tip" aria-hidden="true"></span>
         </div>
-      </section>
-    ))}
-    {hasAffiliate && <p class="muted disclosure">Some setup links are affiliate links. I may earn a small commission at no cost to you.</p>}
+        <p class="desk-hint" aria-hidden="true">Drag to look around · Hover or tap the gear</p>
+        <ul class="gear" aria-label="Desk setup">
+          {gear.map((i) => <li><button type="button" data-model={i.model} data-label={i.name}>{i.name}</button></li>)}
+        </ul>
+      </div>
+    </div>
   </section>
+
+  <section class="section" id="software">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Software</p>
+        <h2>What I build with day to day.</h2>
+      </div>
+      <div class="groups">
+        {software.map((g, gi) => (
+          <article class="group tilt" data-tilt="2.5" data-reveal style={`--i:${gi}`}>
+            <h3>{g.title}</h3>
+            <ul>
+              {g.items.map((i) => (
+                <li>
+                  {i.link ? <a href={i.link} target="_blank" rel="noopener">{i.name}</a> : <span class="name">{i.name}</span>}
+                  {i.note && <span class="muted note">{i.note}</span>}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="setup">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Setup</p>
+        <h2>The physical desk behind the flows.</h2>
+      </div>
+      {setupPhoto && <img class="photo" src={setupPhoto.src} alt={setupPhoto.alt} data-reveal />}
+      <div class="groups">
+        {setup.map((g, gi) => (
+          <article class="group tilt" data-tilt="2.5" data-reveal style={`--i:${gi}`}>
+            <h3>{g.title}</h3>
+            <ul>
+              {g.items.map((i) => (
+                <li>
+                  {i.link
+                    ? <a href={i.link} target="_blank" rel={i.affiliate ? 'sponsored noopener' : 'noopener'}>{i.name}</a>
+                    : <span class="name">{i.name}</span>}
+                  {i.note && <span class="muted note">{i.note}</span>}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+      {hasAffiliate && <p class="muted disclosure">Some setup links are affiliate links. I may earn a small commission at no cost to you.</p>}
+    </div>
+  </section>
+
+  <CtaBand />
 </Base>
 
+<script>
+  import { whenNear } from '../scripts/three/lazy';
+  const el = document.querySelector<HTMLElement>('[data-scene="desk"]');
+  if (el) whenNear(el, async () => { (await import('../scripts/three/desk')).mountDesk(el); });
+</script>
+
 <style>
-  .page { padding-top: 3rem; }
-  .lede { max-width: 60ch; }
-  .jump { display: flex; gap: 1rem; margin: 1rem 0 0; font-size: 0.95rem; }
-  .groups { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
-  .group { padding: 1.25rem 1.5rem; }
-  .group h3 { margin: 0 0 0.75rem; font-size: 1rem; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
-  li { display: flex; flex-direction: column; }
-  .name, li > a { font-weight: 600; }
-  .note { font-size: 0.88rem; line-height: 1.45; }
-  .photo { border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 1rem; }
+  .stack-stage { padding: calc(var(--nav-h) + clamp(2.5rem, 6vw, 4.5rem)) 0 clamp(2rem, 5vw, 3.5rem); }
+  .head { text-align: center; display: grid; justify-items: center; }
+  .head h1 { max-width: 16ch; }
+  .head .lead { max-width: 38rem; margin: 0; }
+
+  .desk { position: relative; margin-top: clamp(0.5rem, 2vw, 1.5rem); }
+  .desk-view { display: none; position: relative; height: clamp(260px, min(58vh, 74vw), 640px); }
+  .desk.is-live .desk-view { display: block; }
+  /* The scene runs edge to edge and fades out at the sides and bottom, so the desk is never cut off by a hard line */
+  .desk-view :global(canvas) { -webkit-mask-image: linear-gradient(#000 82%, #0000), linear-gradient(90deg, #0000, #000 7%, #000 93%, #0000); -webkit-mask-composite: source-in; mask-image: linear-gradient(#000 82%, #0000), linear-gradient(90deg, #0000, #000 7%, #000 93%, #0000); mask-composite: intersect; }
+  .desk-hint, .gear { padding-inline: 20px; }
+  .desk-tip { position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none; white-space: nowrap; padding: 0.3rem 0.7rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; background: color-mix(in srgb, var(--surface) 80%, transparent); border: 1px solid var(--brand-blue); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.25s; will-change: transform; }
+  .desk-tip:global(.is-on) { opacity: 1; }
+  .desk-hint { display: none; margin: 0 0 1rem; text-align: center; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .desk.is-live .desk-hint { display: block; }
+  .gear { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+  .gear button { font: inherit; font-size: 0.88rem; font-weight: 500; color: var(--text); padding: 0.45rem 0.95rem; border-radius: 999px; border: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 70%, transparent); cursor: pointer; transition: border-color 0.25s, background 0.25s, transform 0.25s var(--ease); }
+  .gear button:hover, .gear button:global(.is-active) { border-color: var(--brand-blue); background: color-mix(in srgb, var(--brand-blue) 16%, var(--surface)); transform: translateY(-1px); }
+
+  .groups { display: grid; gap: 16px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (max-width: 700px) { .groups { grid-template-columns: 1fr; } }
+  .group { padding: 1.6rem 1.75rem; border-radius: 24px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .group h3 { margin: 0 0 1rem; font-size: 1.2rem; }
+  .group ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.9rem; }
+  .group li { display: flex; flex-direction: column; }
+  .name, .group li > a { font-weight: 600; }
+  .note { font-size: 0.9rem; line-height: 1.45; }
+  .photo { border-radius: var(--radius-lg); border: 1px solid var(--border); margin-bottom: 1.5rem; }
   .disclosure { font-size: 0.85rem; margin-top: 2rem; }
 </style>

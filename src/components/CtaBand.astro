@@ -1,0 +1,23 @@
+---
+// Closing call-to-action panel used at the bottom of pages.
+import { site } from '../data/site';
+---
+<section class="wrap cta-wrap">
+  <div class="cta stage" data-reveal>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="inner on-dark">
+      <h2>{site.cta[0]} <span class="grad-text">{site.cta[1]}</span></h2>
+      <div class="btn-row">
+        <a class="btn primary" href="/contact/">Get in touch <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn ghost" href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-wrap { margin-top: clamp(3.5rem, 8vw, 6rem); }
+  .cta { border-radius: var(--radius-lg); border: 1px solid var(--border); }
+  .inner { position: relative; z-index: 2; padding: clamp(2.5rem, 7vw, 5.5rem) clamp(1.5rem, 5vw, 4.5rem); display: grid; gap: 1.75rem; color: var(--text); }
+  h2 { margin: 0; max-width: 20ch; font-size: clamp(1.9rem, 4.6vw, 3.4rem); }
+</style>

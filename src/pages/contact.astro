@@ -2,29 +2,50 @@
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
 ---
-<Base title="Contact" description="Get in touch about Power Platform and legal operations automation.">
-  <section class="wrap page">
-    <h1>Contact</h1>
-    <p class="muted lede">The fastest way to reach me is LinkedIn. Or send a note here and I'll reply by email.</p>
-    <p><a class="btn primary" href={site.linkedin} target="_blank" rel="noopener">Message me on LinkedIn</a></p>
+<Base title="Contact" description="Get in touch about Power Platform and legal operations automation." stage>
+  <section class="stage stage-round page-stage" data-stage>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow">Contact</p>
+      <h1>{site.cta[1].replace(/\.$/, '')}<span class="grad-text">.</span></h1>
+      <p class="lead">The fastest way to reach me is LinkedIn. Or send a note here and I'll reply by email.</p>
+    </div>
+  </section>
 
-    <form class="card form" name="contact" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="company">
+  <section class="wrap grid">
+    <a class="card linkedin tilt" data-tilt="4" data-reveal href={site.linkedin} target="_blank" rel="noopener">
+      <span class="in" aria-hidden="true">in</span>
+      <h2>LinkedIn</h2>
+      <p class="muted">Message me directly. This is where I post each case study too.</p>
+      <span class="link-arrow">Message me on LinkedIn →</span>
+    </a>
+
+    <form class="card form" data-reveal style="--i:1" name="contact" method="POST" action="/thanks/" data-netlify="true" netlify-honeypot="company">
       <input type="hidden" name="form-name" value="contact" />
       <p class="hp"><label>Company <input name="company" tabindex="-1" autocomplete="off" /></label></p>
+      <h2>Send a note</h2>
       <label>Name <input name="name" required autocomplete="name" /></label>
       <label>Email <input type="email" name="email" required autocomplete="email" /></label>
       <label>Message <textarea name="message" rows="5" required></textarea></label>
-      <button class="btn primary" type="submit">Send</button>
+      <button class="btn primary" type="submit">Send <span class="arrow" aria-hidden="true">→</span></button>
     </form>
   </section>
 </Base>
 <style>
-  .page { padding-top: 3rem; }
-  .lede { max-width: 60ch; }
-  .form { display: grid; gap: 1rem; padding: 1.5rem; max-width: 560px; margin-top: 2rem; }
-  label { display: grid; gap: 0.35rem; font-weight: 600; font-size: 0.9rem; }
-  input, textarea { font: inherit; font-weight: 400; padding: 0.6rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
-  input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-  button { justify-self: start; cursor: pointer; }
+  .grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 16px; padding-top: clamp(2.5rem, 6vw, 4.5rem); align-items: start; }
+  .card { border-radius: 24px; padding: clamp(1.5rem, 4vw, 2.25rem); box-shadow: var(--shadow); }
+  .card h2 { font-size: 1.6rem; margin: 0; }
+  .linkedin { display: flex; flex-direction: column; gap: 0.75rem; color: inherit; text-decoration: none; }
+  .linkedin:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+  .linkedin p { margin: 0; }
+  .linkedin .link-arrow { color: var(--accent); margin-top: 0.5rem; }
+  .in { width: 46px; height: 46px; border-radius: 12px; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 800; font-size: 1.4rem; letter-spacing: -0.04em; }
+  .form { display: grid; gap: 1rem; }
+  label { display: grid; gap: 0.4rem; font-weight: 600; font-size: 0.9rem; }
+  input, textarea { font: inherit; font-weight: 400; padding: 0.75rem 0.9rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg); color: var(--text); transition: border-color 0.2s, box-shadow 0.2s; }
+  input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent); }
+  textarea { resize: vertical; }
+  button { justify-self: start; }
   .hp { position: absolute; left: -9999px; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
 </style>

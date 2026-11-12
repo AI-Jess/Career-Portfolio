@@ -204,7 +204,7 @@ export function mountDesk(root: HTMLElement) {
   let radius = 3.2;
   stage.onResize(() => {
     const tan = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
-    radius = Math.max(2.72 / (2 * tan * stage.size.aspect), 1.4 / (2 * tan));
+    radius = Math.max(3.0 / (2 * tan * stage.size.aspect), 1.4 / (2 * tan));
   });
 
   /* ----- Drag to look around ----- */

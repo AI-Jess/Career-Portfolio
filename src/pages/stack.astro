@@ -15,7 +15,7 @@ const gear = setup.flatMap((g) => g.items).filter((i) => i.model);
       <h1>The tools, and the <span class="grad-text">desk behind them.</span></h1>
       <p class="lead">What I use to design, build, and support automations, plus the hardware it all runs on.</p>
     </div>
-    <div class="wrap">
+    <div class="desk-bleed">
       <div class="desk" data-scene="desk">
         <div class="desk-view">
           <canvas class="stage-canvas" aria-hidden="true"></canvas>
@@ -99,7 +99,9 @@ const gear = setup.flatMap((g) => g.items).filter((i) => i.model);
   .desk { position: relative; margin-top: clamp(0.5rem, 2vw, 1.5rem); }
   .desk-view { display: none; position: relative; height: clamp(260px, min(58vh, 74vw), 640px); }
   .desk.is-live .desk-view { display: block; }
-  .desk-view :global(canvas) { -webkit-mask-image: linear-gradient(#000 82%, #0000); mask-image: linear-gradient(#000 82%, #0000); }
+  /* The scene runs edge to edge and fades out at the sides and bottom, so the desk is never cut off by a hard line */
+  .desk-view :global(canvas) { -webkit-mask-image: linear-gradient(#000 82%, #0000), linear-gradient(90deg, #0000, #000 7%, #000 93%, #0000); -webkit-mask-composite: source-in; mask-image: linear-gradient(#000 82%, #0000), linear-gradient(90deg, #0000, #000 7%, #000 93%, #0000); mask-composite: intersect; }
+  .desk-hint, .gear { padding-inline: 20px; }
   .desk-tip { position: absolute; left: 0; top: 0; z-index: 3; pointer-events: none; white-space: nowrap; padding: 0.3rem 0.7rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; background: color-mix(in srgb, var(--surface) 80%, transparent); border: 1px solid var(--brand-blue); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); opacity: 0; transition: opacity 0.25s; will-change: transform; }
   .desk-tip:global(.is-on) { opacity: 1; }
   .desk-hint { display: none; margin: 0 0 1rem; text-align: center; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }

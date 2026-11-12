@@ -7,6 +7,8 @@ export type StackItem = {
   note?: string;
   link?: string;
   affiliate?: boolean;
+  /** Which object in the 3D desk scene this is (see src/scripts/three/desk.ts). Optional. */
+  model?: 'ultrawide' | 'vertical' | 'landscape' | 'headphones' | 'airpods' | 'ipad';
 };
 
 export type StackGroup = { title: string; items: StackItem[] };
@@ -53,17 +55,17 @@ export const setup: StackGroup[] = [
   {
     title: 'Displays',
     items: [
-      { name: 'Philips Brilliance 499P', note: '49" super-ultrawide. Flow designer, run history, and SQL side by side' },
-      { name: 'Vertical monitor', note: 'Long expressions, documentation, and Teams' },
-      { name: 'Landscape monitor', note: 'Email, calendar, and reference' },
+      { name: 'Philips Brilliance 499P', model: 'ultrawide', note: '49" super-ultrawide. Flow designer, run history, and SQL side by side' },
+      { name: 'Vertical monitor', model: 'vertical', note: 'Long expressions, documentation, and Teams' },
+      { name: 'Landscape monitor', model: 'landscape', note: 'Email, calendar, and reference' },
     ],
   },
   {
     title: 'Audio & mobile',
     items: [
-      { name: 'Bose headphones', note: 'Focus time and calls' },
-      { name: 'AirPods Pro' },
-      { name: 'iPad', note: 'Sketching flows and notes' },
+      { name: 'Bose headphones', model: 'headphones', note: 'Focus time and calls' },
+      { name: 'AirPods Pro', model: 'airpods' },
+      { name: 'iPad', model: 'ipad', note: 'Sketching flows and notes' },
     ],
   },
 ];

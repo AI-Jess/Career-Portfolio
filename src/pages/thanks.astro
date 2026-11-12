@@ -1,9 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Thanks">
-  <section class="wrap" style="padding-top:3rem">
-    <h1>Thanks — message received.</h1>
-    <p class="muted">I'll get back to you soon. <a href="/">Back home</a></p>
+<Base title="Thanks" stage>
+  <section class="stage stage-round page-stage" data-stage>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow">Message received</p>
+      <h1>Thank you<span class="grad-text">.</span></h1>
+      <p class="lead">I'll get back to you soon.</p>
+      <p style="margin-top:1.75rem"><a class="btn ghost" href="/">Back home</a></p>
+    </div>
   </section>
 </Base>

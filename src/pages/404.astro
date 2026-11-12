@@ -1,9 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Not found">
-  <section class="wrap" style="padding-top:3rem">
-    <h1>Page not found</h1>
-    <p><a href="/">Back home</a></p>
+<Base title="Not found" stage>
+  <section class="stage stage-round page-stage" data-stage>
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow">404</p>
+      <h1>Page not found<span class="grad-text">.</span></h1>
+      <p class="lead">That page doesn't exist, or it has moved.</p>
+      <p style="margin-top:1.75rem"><a class="btn ghost" href="/">Back home</a></p>
+    </div>
   </section>
 </Base>
